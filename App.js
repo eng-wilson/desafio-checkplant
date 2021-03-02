@@ -1,13 +1,16 @@
 import 'react-native-gesture-handler';
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native';
 
 import Routes from './src/routes';
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Routes />
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+        <Routes />
+      </SafeAreaView>
     </NavigationContainer>
   );
 }

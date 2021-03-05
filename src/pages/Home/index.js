@@ -13,11 +13,6 @@ const Home = ({ navigation }) => {
   useEffect(() => {
     Geolocation.requestAuthorization();
 
-    // Geolocation.getCurrentPosition((info) => {
-    //   setLatitude(info.coords.latitude);
-    //   setLongitude(info.coords.longitude);
-    // });
-
     Geolocation.watchPosition((info) => {
       setLatitude(info.coords.latitude);
       setLongitude(info.coords.longitude);
@@ -28,12 +23,6 @@ const Home = ({ navigation }) => {
     <Container>
       <MapView
         style={{ flex: 1 }}
-        initialRegion={{
-          latitude,
-          longitude,
-          latitudeDelta: 0.0068,
-          longitudeDelta: 0.0068,
-        }}
         region={{
           latitude,
           longitude,
@@ -44,6 +33,14 @@ const Home = ({ navigation }) => {
         <Marker
           key={1}
           coordinate={{ latitude: latitude + 0.001, longitude: longitude + 0.001 }}
+        />
+        <Marker
+          key={2}
+          coordinate={{ latitude: latitude - 0.0006, longitude: longitude + 0.0003 }}
+        />
+        <Marker
+          key={3}
+          coordinate={{ latitude: latitude + 0.0007, longitude: longitude - 0.001 }}
         />
       </MapView>
 

@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { Image } from 'react-native';
 import { Form } from '@unform/mobile';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import NewPoint from '../../assets/newPoint.png';
 
@@ -13,12 +14,30 @@ import {
 const AddPoint = ({ route, navigation }) => {
   const formRef = useRef(null);
 
-  function handleSubmit(data) {
-    console.tron.log({
-      latitude: route.params.coords.latitude,
-      longitude: route.params.coords.longitude,
-      annotation: data.annotation,
-    });
+  const getMyMarkers = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('@location');
+      return jsonValue !== null ? JSON.parse(jsonValue) : [];
+    } catch (e) {
+      return [];
+    }
+  };
+
+  async function handleSubmit(data) {
+    try {
+      const storagedLocations = await getMyMarkers();
+
+      const jsonValue = JSON.stringify([...storagedLocations, {
+        latitude: route.params.coords.latitude,
+        longitude: route.params.coords.longitude,
+        annotation: data.annotation,
+        datetime: `${(new Date()).toISOString().split('T')[0]} ${(new Date()).toTimeString().split(' ')[0]}`,
+      }]);
+
+      await AsyncStorage.removeItem('@location', jsonValue);
+    } catch (e) {
+      // saving error
+    }
   }
 
   return (

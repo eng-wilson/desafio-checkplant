@@ -36,6 +36,7 @@ const AddPoint = ({ route, navigation }) => {
       }]);
 
       await AsyncStorage.setItem('@location', jsonValue);
+      navigation.replace('Success');
     } catch (e) {
       // saving error
     }

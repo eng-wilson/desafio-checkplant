@@ -27,5 +27,5 @@ export const TextInput = styled.TextInput`
   flex: 1;
   color: #000;
   font-size: 14px;
-  
+  height: 100%;
 `;

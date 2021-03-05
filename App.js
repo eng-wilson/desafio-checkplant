@@ -5,6 +5,8 @@ import { SafeAreaView } from 'react-native';
 
 import Routes from './src/routes';
 
+import('./src/config/ReactotronConfig');
+
 export default function App() {
   return (
     <NavigationContainer>

@@ -8,6 +8,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@react-native-community/geolocation": "^2.0.2",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/native": "^5.9.3",
     "@react-navigation/stack": "^5.14.3",
@@ -19,6 +20,7 @@
     "react-dom": "16.13.1",
     "react-native": "~0.63.4",
     "react-native-gesture-handler": "^1.10.3",
+    "react-native-maps": "0.27.1",
     "react-native-reanimated": "^1.13.2",
     "react-native-safe-area-context": "^3.1.9",
     "react-native-screens": "^2.18.1",
@@ -40,7 +42,8 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "jest": "~25.2.6",
     "prettier": "^2.2.1",
-    "react-test-renderer": "~16.13.1"
+    "react-test-renderer": "~16.13.1",
+    "reactotron-react-native": "^5.0.0"
   },
   "jest": {
     "preset": "react-native"

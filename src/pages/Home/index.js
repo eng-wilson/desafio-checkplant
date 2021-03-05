@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import MapView, { Marker } from 'react-native-maps';
+import MapView, { Marker, Callout } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {
   Container, Title, ActionButton, ButtonsContainer,
@@ -9,8 +10,22 @@ import {
 const Home = ({ navigation }) => {
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
+  const [markers, setMarkers] = useState([]);
+
+  const getMyMarkers = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('@location');
+      if (jsonValue !== null) {
+        setMarkers(JSON.parse(jsonValue));
+      }
+    } catch (e) {
+      console.tron.log(e);
+    }
+  };
 
   useEffect(() => {
+    getMyMarkers();
+
     Geolocation.requestAuthorization();
 
     Geolocation.watchPosition((info) => {
@@ -30,18 +45,15 @@ const Home = ({ navigation }) => {
           longitudeDelta: 0.0068,
         }}
       >
-        <Marker
-          key={1}
-          coordinate={{ latitude: latitude + 0.001, longitude: longitude + 0.001 }}
-        />
-        <Marker
-          key={2}
-          coordinate={{ latitude: latitude - 0.0006, longitude: longitude + 0.0003 }}
-        />
-        <Marker
-          key={3}
-          coordinate={{ latitude: latitude + 0.0007, longitude: longitude - 0.001 }}
-        />
+        {markers.map((marker) => (
+          <Marker
+            title={marker.annotation}
+            description={marker.datetime}
+            key={markers.indexOf(marker)}
+            coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
+            pinColor="green"
+          />
+        ))}
       </MapView>
 
       <ButtonsContainer>

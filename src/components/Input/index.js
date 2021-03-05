@@ -3,9 +3,7 @@ import { useField } from '@unform/core';
 
 import { Container, TextInput } from './styles';
 
-function Input({
-  name, ...rest
-}) {
+function Input({ name }) {
   const inputRef = useRef(null);
 
   const {
@@ -57,7 +55,6 @@ function Input({
         ref={inputRef}
         onChangeText={handleChangeText}
         defaultValue={defaultValue}
-        {...rest}
       />
     </Container>
   );

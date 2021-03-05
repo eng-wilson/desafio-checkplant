@@ -32,6 +32,7 @@ const AddPoint = ({ route, navigation }) => {
         longitude: route.params.coords.longitude,
         annotation: data.annotation,
         datetime: `${(new Date()).toISOString().split('T')[0]} ${(new Date()).toTimeString().split(' ')[0]}`,
+        sync: false,
       }]);
 
       await AsyncStorage.setItem('@location', jsonValue);

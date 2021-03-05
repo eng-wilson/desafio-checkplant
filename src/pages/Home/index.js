@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import MapView, { Marker, Callout } from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import _ from 'lodash';
+
+import api from '../../services/api';
 
 import {
   Container, Title, ActionButton, ButtonsContainer,
@@ -15,16 +18,39 @@ const Home = ({ navigation }) => {
   const getMyMarkers = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem('@location');
+
       if (jsonValue !== null) {
         setMarkers(JSON.parse(jsonValue));
+      } else {
+        setMarkers([]);
       }
     } catch (e) {
       console.tron.log(e);
     }
   };
 
+  async function handleSync() {
+    const markersAux = markers;
+    try {
+      await Promise.all(markersAux.map(async (marker) => {
+        if (!marker.sync) {
+          await api.syncMarkers(marker);
+          _.find(markersAux, marker).sync = true;
+        }
+      }));
+
+      await AsyncStorage.setItem('@location', JSON.stringify(markersAux));
+
+      getMyMarkers();
+    } catch (e) {
+      console.tron.log(e);
+    }
+  }
+
   useEffect(() => {
-    getMyMarkers();
+    navigation.addListener('focus', () => {
+      getMyMarkers();
+    });
 
     Geolocation.requestAuthorization();
 
@@ -51,13 +77,13 @@ const Home = ({ navigation }) => {
             description={marker.datetime}
             key={markers.indexOf(marker)}
             coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
-            pinColor="green"
+            pinColor={marker.sync ? 'gray' : 'green'}
           />
         ))}
       </MapView>
 
       <ButtonsContainer>
-        <ActionButton>
+        <ActionButton onPress={() => handleSync()}>
           <Title>Sincronizar</Title>
         </ActionButton>
 

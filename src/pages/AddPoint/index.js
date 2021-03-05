@@ -34,7 +34,7 @@ const AddPoint = ({ route, navigation }) => {
         datetime: `${(new Date()).toISOString().split('T')[0]} ${(new Date()).toTimeString().split(' ')[0]}`,
       }]);
 
-      await AsyncStorage.removeItem('@location', jsonValue);
+      await AsyncStorage.setItem('@location', jsonValue);
     } catch (e) {
       // saving error
     }

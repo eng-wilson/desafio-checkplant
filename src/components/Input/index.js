@@ -55,6 +55,7 @@ function Input({ name }) {
         ref={inputRef}
         onChangeText={handleChangeText}
         defaultValue={defaultValue}
+        multiline
       />
     </Container>
   );

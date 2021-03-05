@@ -7,13 +7,15 @@ import _ from 'lodash';
 import api from '../../services/api';
 
 import {
-  Container, Title, ActionButton, ButtonsContainer,
+  Container, Title, ActionButton, ButtonsContainer, FetchContainer, FetchTitle,
 } from './styles';
 
 const Home = ({ navigation }) => {
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
   const [markers, setMarkers] = useState([]);
+  const [fetching, setFetching] = useState(false);
+  const [error, setError] = useState(false);
 
   const getMyMarkers = async () => {
     try {
@@ -31,6 +33,8 @@ const Home = ({ navigation }) => {
 
   async function handleSync() {
     const markersAux = markers;
+    setFetching(true);
+
     try {
       await Promise.all(markersAux.map(async (marker) => {
         if (!marker.sync) {
@@ -42,8 +46,15 @@ const Home = ({ navigation }) => {
       await AsyncStorage.setItem('@location', JSON.stringify(markersAux));
 
       getMyMarkers();
+
+      setTimeout(() => setFetching(false), 2000);
     } catch (e) {
-      console.tron.log(e);
+      setError(true);
+
+      setTimeout(() => {
+        setError(false);
+        setFetching(false);
+      }, 2000);
     }
   }
 
@@ -62,6 +73,11 @@ const Home = ({ navigation }) => {
 
   return (
     <Container>
+      {fetching && (
+      <FetchContainer>
+        <FetchTitle>{error ? 'Ocorreu um erro. Tente novamente.' : 'Sincronização em andamento...'}</FetchTitle>
+      </FetchContainer>
+      )}
       <MapView
         style={{ flex: 1 }}
         region={{

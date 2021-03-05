@@ -51,3 +51,32 @@ export const ActionButton = styled.TouchableOpacity`
     }
   }}
 `;
+
+export const FetchContainer = styled.View`
+  position: absolute;
+  align-self: center;
+  top: 0%;
+
+  width: 100%;
+  height: 40px;
+
+  align-items: center;
+  justify-content: center;
+
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+
+  padding: 0px 20px;
+  
+
+  background-color: #FA7F72;
+
+  z-index: 1;
+`;
+
+export const FetchTitle = styled.Text`
+  color: #fff;
+  font-size: 16px;
+  
+  text-align: center;
+`;

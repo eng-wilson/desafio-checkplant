@@ -13,6 +13,11 @@ const Home = ({ navigation }) => {
   useEffect(() => {
     Geolocation.requestAuthorization();
 
+    // Geolocation.getCurrentPosition((info) => {
+    //   setLatitude(info.coords.latitude);
+    //   setLongitude(info.coords.longitude);
+    // });
+
     Geolocation.watchPosition((info) => {
       setLatitude(info.coords.latitude);
       setLongitude(info.coords.longitude);
@@ -47,7 +52,7 @@ const Home = ({ navigation }) => {
           <Title>Sincronizar</Title>
         </ActionButton>
 
-        <ActionButton action="forward" onPress={() => navigation.navigate('AddPoint')}>
+        <ActionButton action="forward" onPress={() => navigation.navigate('AddPoint', { coords: { latitude, longitude } })}>
           <Title>Adicionar</Title>
         </ActionButton>
       </ButtonsContainer>

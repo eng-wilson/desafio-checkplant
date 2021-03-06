@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Platform, PermissionsAndroid } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -58,12 +59,34 @@ const Home = ({ navigation }) => {
     }
   }
 
+  async function getAndroidPermission() {
+    try {
+      await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+          title: 'Permissão para obter sua localização',
+          message:
+            'Sua localização é necessária para utilizar a aplicação',
+          buttonNeutral: 'Me pergunte depois',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+    } catch (e) {
+      console.tron.log(e);
+    }
+  }
+
   useEffect(() => {
     navigation.addListener('focus', () => {
       getMyMarkers();
     });
 
-    Geolocation.requestAuthorization();
+    if (Platform.OS === 'ios') {
+      Geolocation.requestAuthorization();
+    } else {
+      getAndroidPermission();
+    }
 
     Geolocation.watchPosition((info) => {
       setLatitude(info.coords.latitude);
@@ -91,9 +114,9 @@ const Home = ({ navigation }) => {
           <Marker
             title={marker.annotation}
             description={marker.datetime}
-            key={markers.indexOf(marker)}
+            key={`${markers.indexOf(marker)} - ${marker.sync}`}
             coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
-            pinColor={marker.sync ? 'gray' : 'green'}
+            pinColor={marker.sync ? 'aqua' : 'green'}
           />
         ))}
       </MapView>

@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Image } from 'react-native';
+import { Image, KeyboardAvoidingView, Platform } from 'react-native';
 import { Form } from '@unform/mobile';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -43,38 +43,44 @@ const AddPoint = ({ route, navigation }) => {
   }
 
   return (
-    <Container>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      enabled
+    >
+      <Container>
 
-      <StrongTitle>Adicionando novo ponto</StrongTitle>
+        <StrongTitle>Adicionando novo ponto</StrongTitle>
 
-      <Image
-        source={NewPoint}
-        resizeMode="contain"
-        style={{
-          width: '90%',
-          height: undefined,
-          aspectRatio: 1,
-          marginVertical: 20,
+        <Image
+          source={NewPoint}
+          resizeMode="contain"
+          style={{
+            width: '90%',
+            height: undefined,
+            aspectRatio: 1,
+            marginVertical: 20,
 
-        }}
-      />
+          }}
+        />
 
-      <Form ref={formRef} onSubmit={handleSubmit}>
-        <Label>Anotações</Label>
-        <Input name="annotation" label="Anotação" />
+        <Form ref={formRef} onSubmit={handleSubmit}>
+          <Label>Anotações</Label>
+          <Input name="annotation" label="Anotação" />
 
-        <ButtonsContainer>
-          <ActionButton action="back" onPress={() => navigation.goBack()}>
-            <Title>Voltar</Title>
-          </ActionButton>
+          <ButtonsContainer>
+            <ActionButton action="back" onPress={() => navigation.goBack()}>
+              <Title>Voltar</Title>
+            </ActionButton>
 
-          <ActionButton action="forward" onPress={() => formRef.current.submitForm()}>
-            <Title>Concluir</Title>
-          </ActionButton>
-        </ButtonsContainer>
-      </Form>
+            <ActionButton action="forward" onPress={() => formRef.current.submitForm()}>
+              <Title>Concluir</Title>
+            </ActionButton>
+          </ButtonsContainer>
+        </Form>
 
-    </Container>
+      </Container>
+    </KeyboardAvoidingView>
   );
 };
 
